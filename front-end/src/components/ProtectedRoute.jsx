@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom";
 
 export default function ProtectedRoute({ children }) {
+  const token = localStorage.getItem("smartlab_token");
+  
 
-  const isAuth = localStorage.getItem("auth");
-
-  if (!isAuth) {
+  if (!token) {
     return <Navigate to="/login" replace />;
   }
 

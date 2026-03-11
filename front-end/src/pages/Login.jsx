@@ -56,9 +56,13 @@ export default function Login() {
         return;
       }
 
-      localStorage.setItem("auth", "true");
-      localStorage.setItem("token", data.token || "");
-      navigate("/");
+      localStorage.setItem("smartlab_token", data.token);
+      localStorage.setItem(
+        "smartlab_user",
+        JSON.stringify({ email: form.email })
+      );
+
+      navigate("/dashboard");
     } catch (error) {
       setError("Couldn't connect to the server.");
     } finally {
@@ -104,7 +108,7 @@ export default function Login() {
           >
             <span className="relative inline-block">
               Login
-              <span
+              {/* <span
                 className="pointer-events-none absolute -left-1 -right-1"
                 style={{
                   bottom: "6px",
@@ -113,9 +117,9 @@ export default function Login() {
                   borderRadius: "50%",
                   transform: "rotate(-2deg)",
                 }}
-              />
-            </span>
-            <span> </span>to Your Account
+              /> */}
+            </span>{" "}
+            to Your Account
           </h1>
         </motion.div>
 
@@ -127,7 +131,7 @@ export default function Login() {
           className="mb-8 text-center text-sm leading-relaxed text-black/55"
         >
           Sign in to view your dashboard, check model status, and manage your
-          smart lab controls.
+          workspace controls.
         </motion.p>
 
         <motion.form
@@ -139,9 +143,9 @@ export default function Login() {
           className="w-full space-y-3"
         >
           <input
-            type="text"
+            type="email"
             name="email"
-            placeholder="Email or username"
+            placeholder="Email"
             value={form.email}
             onChange={updateField}
             className="w-full rounded-sm border border-black/10 bg-white/70 px-6 py-4 text-[14px] outline-none transition-all duration-200 placeholder:text-black/30 focus:border-black/25 focus:bg-white focus:ring-2 focus:ring-black/5"

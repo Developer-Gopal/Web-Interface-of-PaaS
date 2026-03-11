@@ -4,7 +4,10 @@ import { motion } from "framer-motion";
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.1 },
+  },
 };
 
 const fadeUp = {
@@ -15,18 +18,42 @@ const fadeUp = {
 // Status badge component
 function StatusBadge({ status }) {
   const config = {
-    active:   { dot: "bg-green-500",  ring: "bg-green-100",  text: "text-green-700",  label: "Active"   },
-    inactive: { dot: "bg-red-400",    ring: "bg-red-50",     text: "text-red-600",    label: "Inactive" },
-    checking: { dot: "bg-yellow-400", ring: "bg-yellow-50",  text: "text-yellow-700", label: "Checking" },
-  }[status] ?? { dot: "bg-gray-400", ring: "bg-gray-100", text: "text-gray-600", label: "Unknown" };
+    active: {
+      dot: "bg-green-500",
+      ring: "bg-green-100",
+      text: "text-green-700",
+      label: "Active",
+    },
+    inactive: {
+      dot: "bg-red-400",
+      ring: "bg-red-50",
+      text: "text-red-600",
+      label: "Inactive",
+    },
+    checking: {
+      dot: "bg-yellow-400",
+      ring: "bg-yellow-50",
+      text: "text-yellow-700",
+      label: "Checking",
+    },
+  }[status] ?? {
+    dot: "bg-gray-400",
+    ring: "bg-gray-100",
+    text: "text-gray-600",
+    label: "Unknown",
+  };
 
   return (
-    <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${config.ring} ${config.text}`}>
+    <span
+      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${config.ring} ${config.text}`}
+    >
       <span className={`relative flex h-2 w-2`}>
         {status === "active" && (
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400 opacity-75" />
         )}
-        <span className={`relative inline-flex h-2 w-2 rounded-full ${config.dot}`} />
+        <span
+          className={`relative inline-flex h-2 w-2 rounded-full ${config.dot}`}
+        />
       </span>
       {config.label}
     </span>
@@ -38,17 +65,54 @@ export default function Dashboard() {
   const location = useLocation();
 
   const [models, setModels] = useState([
-    { id: 1, name: "John McCarthy Lab",  date: "10 Mar 2026", zones: [], tunnelUrl: "https://john-mccarthy-lab.trycloudflare.com" },
-    { id: 2, name: "Bill Gates Lab",     date: "10 Mar 2026", zones: [], tunnelUrl: "https://bill-gates-lab.trycloudflare.com" },
-    { id: 3, name: "MT Block Lab",       date: "10 Mar 2026", zones: [], tunnelUrl: "https://mt-block-lab.trycloudflare.com" },
-    { id: 4, name: "CSE Cyber Lab",      date: "10 Mar 2026", zones: [], tunnelUrl: "https://cse-cyber-lab.trycloudflare.com" },
-    { id: 5, name: "Computer Science Lab",date: "10 Mar 2026",zones: [], tunnelUrl: "https://computer-science-lab.trycloudflare.com" },
-    { id: 6, name: "IT Dept Lab",        date: "10 Mar 2026", zones: [], tunnelUrl: "https://it-dept-lab.trycloudflare.com" },
+    {
+      id: 1,
+      name: "John McCarthy Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl:
+        "https://momentum-disclaimers-lime-destination.trycloudflare.com",
+    },
+    {
+      id: 2,
+      name: "Bill Gates Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl: "https://bill-gates-lab.trycloudflare.com",
+    },
+    {
+      id: 3,
+      name: "MT Block Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl: "https://mt-block-lab.trycloudflare.com",
+    },
+    {
+      id: 4,
+      name: "CSE Cyber Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl: "https://cse-cyber-lab.trycloudflare.com",
+    },
+    {
+      id: 5,
+      name: "Computer Science Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl: "https://computer-science-lab.trycloudflare.com",
+    },
+    {
+      id: 6,
+      name: "IT Dept Lab",
+      date: "10 Mar 2026",
+      zones: [],
+      tunnelUrl: "https://it-dept-lab.trycloudflare.com",
+    },
   ]);
 
   // Separate status map: { [id]: "active" | "inactive" | "checking" }
   const [statuses, setStatuses] = useState(() =>
-    Object.fromEntries([1,2,3,4,5,6].map(id => [id, "checking"]))
+    Object.fromEntries([1, 2, 3, 4, 5, 6].map((id) => [id, "checking"])),
   );
 
   // Check a single model's status
@@ -65,12 +129,12 @@ export default function Dashboard() {
       clearTimeout(timeout);
 
       const data = await res.json();
-      setStatuses(prev => ({
+      setStatuses((prev) => ({
         ...prev,
         [model.id]: data.running ? "active" : "inactive",
       }));
     } catch {
-      setStatuses(prev => ({ ...prev, [model.id]: "inactive" }));
+      setStatuses((prev) => ({ ...prev, [model.id]: "inactive" }));
     }
   }, []);
 
@@ -89,23 +153,30 @@ export default function Dashboard() {
   useEffect(() => {
     if (location.state?.newModel) {
       const incomingModel = location.state.newModel;
-      setModels(prev => {
-        const alreadyExists = prev.some(m => m.id === incomingModel.id);
+      setModels((prev) => {
+        const alreadyExists = prev.some((m) => m.id === incomingModel.id);
         if (alreadyExists) return prev;
-        return [...prev, { ...incomingModel, tunnelUrl: incomingModel.tunnelUrl || "" }];
+        return [
+          ...prev,
+          { ...incomingModel, tunnelUrl: incomingModel.tunnelUrl || "" },
+        ];
       });
-      setStatuses(prev => ({ ...prev, [incomingModel.id]: "checking" }));
+      setStatuses((prev) => ({ ...prev, [incomingModel.id]: "checking" }));
       navigate(location.pathname, { replace: true, state: null });
     }
   }, [location.state, navigate, location.pathname]);
 
   const startModel = async (model) => {
     try {
-      setStatuses(prev => ({ ...prev, [model.id]: "checking" }));
+      setStatuses((prev) => ({ ...prev, [model.id]: "checking" }));
       const response = await fetch(`${model.tunnelUrl}/start-model`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: model.id, name: model.name, zones: model.zones }),
+        body: JSON.stringify({
+          id: model.id,
+          name: model.name,
+          zones: model.zones,
+        }),
       });
       const data = await response.json();
       console.log(`Start response from ${model.name}:`, data);
@@ -113,7 +184,7 @@ export default function Dashboard() {
       setTimeout(() => checkStatus(model), 2000);
     } catch (error) {
       console.error(`Error starting ${model.name}:`, error);
-      setStatuses(prev => ({ ...prev, [model.id]: "inactive" }));
+      setStatuses((prev) => ({ ...prev, [model.id]: "inactive" }));
     }
   };
 
@@ -126,7 +197,7 @@ export default function Dashboard() {
       });
       const data = await response.json();
       console.log(`Stop response from ${model.name}:`, data);
-      setStatuses(prev => ({ ...prev, [model.id]: "inactive" }));
+      setStatuses((prev) => ({ ...prev, [model.id]: "inactive" }));
     } catch (error) {
       console.error(`Error stopping ${model.name}:`, error);
     }
@@ -145,9 +216,18 @@ export default function Dashboard() {
       <div className="pointer-events-none absolute -bottom-24 -right-24 -z-10 h-72 w-72 rounded-full bg-emerald-300/25 blur-3xl sm:h-96 sm:w-96" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-10">
-        <motion.div variants={fadeUp} initial="hidden" animate="show" className="mb-6 text-center sm:mb-8 sm:text-left">
-          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">Your Saved Models</h1>
-          <p className="mt-2 text-sm text-slate-600 sm:text-base">Manage your saved zone configurations.</p>
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          animate="show"
+          className="mb-6 text-center sm:mb-8 sm:text-left"
+        >
+          <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl md:text-4xl">
+            Your Saved Models
+          </h1>
+          <p className="mt-2 text-sm text-slate-600 sm:text-base">
+            Manage your saved zone configurations.
+          </p>
         </motion.div>
 
         <motion.div
@@ -172,9 +252,15 @@ export default function Dashboard() {
                 </div>
 
                 <div className="text-center">
-                  <h2 className="text-base font-semibold text-slate-900 sm:text-lg">{model.name}</h2>
-                  <p className="mt-1 text-xs text-slate-500">Created on {model.date}</p>
-                  <div className="mt-2 break-all text-[11px] text-slate-400">{model.tunnelUrl}</div>
+                  <h2 className="text-base font-semibold text-slate-900 sm:text-lg">
+                    {model.name}
+                  </h2>
+                  <p className="mt-1 text-xs text-slate-500">
+                    Created on {model.date}
+                  </p>
+                  <div className="mt-2 break-all text-[11px] text-slate-400">
+                    {model.tunnelUrl}
+                  </div>
                 </div>
 
                 <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:justify-center">

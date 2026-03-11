@@ -1,20 +1,17 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import "./App.css";
-
-import Home from "./pages/HomePage.jsx";
-import Dashboard from "./pages/Dashboard.jsx";
-import Features from "./pages/Features.jsx";
-import Contact from "./pages/Contact.jsx";
-import About from "./pages/About.jsx";
-import Login from "./pages/Login.jsx";
-
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Navbar from "./components/Navbar.jsx";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+import Home from "./pages/HomePage";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Features from "./pages/Features";
+import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 function Layout() {
   const location = useLocation();
-
   const hideLayout = location.pathname === "/login";
 
   return (
@@ -22,12 +19,43 @@ function Layout() {
       {!hideLayout && <Navbar />}
 
       <Routes>
-        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/features" element={<Features />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/features"
+          element={
+            <ProtectedRoute>
+              <Features />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/contact"
+          element={
+            <ProtectedRoute>
+              <Contact />
+            </ProtectedRoute>
+          }
+        />
+                <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <About />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!hideLayout && <Footer />}
@@ -35,12 +63,10 @@ function Layout() {
   );
 }
 
-function App() {
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Layout />
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;
