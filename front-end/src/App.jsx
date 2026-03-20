@@ -2,20 +2,25 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-import Home from "./pages/HomePage";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Features from "./pages/Features";
-import Contact from "./pages/Contact";
-import About from "./pages/About";
+import Models from "./pages/Models";
+import Analytics from "./pages/Analytics";
+import AIPrediction from "./pages/AIPrediction";
+import CameraView from "./pages/CameraView";
+import AutomationLogs from "./pages/AutomationLogs";
 
 function Layout() {
   const location = useLocation();
-  const hideLayout = location.pathname === "/login";
+
+  // Pages where Navbar & Footer should NOT show
+  const hideLayout =
+    location.pathname === "/" || location.pathname === "/login";
 
   return (
     <>
+      {/* ✅ Show Navbar only after login pages */}
       {!hideLayout && <Navbar />}
 
       <Routes>
@@ -30,34 +35,51 @@ function Layout() {
             </ProtectedRoute>
           }
         />
-
         <Route
-          path="/features"
+          path="/analytics"
           element={
             <ProtectedRoute>
-              <Features />
+              <Analytics />
             </ProtectedRoute>
           }
         />
 
         <Route
-          path="/contact"
+          path="/models"
           element={
             <ProtectedRoute>
-              <Contact />
+              <Models />
             </ProtectedRoute>
           }
         />
-                <Route
-          path="/about"
+
+        <Route
+          path="/prediction"
           element={
             <ProtectedRoute>
-              <About />
+              <AIPrediction />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cameraview"
+          element={
+            <ProtectedRoute>
+              <CameraView />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/logs"
+          element={
+            <ProtectedRoute>
+              <AutomationLogs />
             </ProtectedRoute>
           }
         />
       </Routes>
 
+      {/* ✅ Footer also hidden on Home & Login */}
       {!hideLayout && <Footer />}
     </>
   );

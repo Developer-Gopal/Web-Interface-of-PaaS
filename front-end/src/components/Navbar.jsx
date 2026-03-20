@@ -5,7 +5,7 @@ import { Menu, X, LogOut, LogIn } from "lucide-react";
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(
-    !!localStorage.getItem("smartlab_token")
+    !!localStorage.getItem("smartlab_token"),
   );
 
   const navigate = useNavigate();
@@ -50,10 +50,24 @@ export default function Navbar() {
         </NavLink>
 
         <nav className="hidden items-center gap-8 md:flex">
-          <NavLink to="/" className={getLinkClass}>Home</NavLink>
-          <NavLink to="/dashboard" className={getLinkClass}>Dashboard</NavLink>
-          <NavLink to="/features" className={getLinkClass}>Features</NavLink>
-          <NavLink to="/contact" className={getLinkClass}>Contact</NavLink>
+          <NavLink to="/dashboard" className={getLinkClass}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/analytics" className={getLinkClass} onClick={closeMenu}>
+            Analytics
+          </NavLink>
+          <NavLink to="/models" className={getLinkClass}>
+            Models
+          </NavLink>
+          <NavLink to="/prediction" className={getLinkClass}>
+            AI Prediction
+          </NavLink>
+          <NavLink to="/cameraview" className={getLinkClass}>
+            Camera View
+          </NavLink>
+          <NavLink to="/logs" className={getLinkClass}>
+            Logs & Reports
+          </NavLink>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -90,17 +104,27 @@ export default function Navbar() {
         <div className="px-6 pb-5 md:hidden">
           <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm">
             <div className="flex flex-col gap-3">
-              <NavLink to="/" className={getLinkClass} onClick={closeMenu}>
-                Home
-              </NavLink>
-              <NavLink to="/dashboard" className={getLinkClass} onClick={closeMenu}>
+              <NavLink to="/dashboard" className={getLinkClass}>
                 Dashboard
               </NavLink>
-              <NavLink to="/features" className={getLinkClass} onClick={closeMenu}>
-                Features
+              <NavLink
+                to="/analytics"
+                className={getLinkClass}
+                onClick={closeMenu}
+              >
+                Analytics
               </NavLink>
-              <NavLink to="/contact" className={getLinkClass} onClick={closeMenu}>
-                Contact
+              <NavLink to="/models" className={getLinkClass}>
+                Models
+              </NavLink>
+              <NavLink to="/prediction" className={getLinkClass}>
+                AI Prediction
+              </NavLink>
+              <NavLink to="/cameraview" className={getLinkClass}>
+                Camera View
+              </NavLink>
+              <NavLink to="/logs" className={getLinkClass}>
+                Logs & Reports
               </NavLink>
 
               {isLoggedIn ? (
